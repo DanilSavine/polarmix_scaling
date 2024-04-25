@@ -32,7 +32,8 @@ def swap(pt1, pt2, start_angle, end_angle, label1, label2):
 
     return pt1_out, pt2_out, label1_out, label2_out
 
-def rotate_copy(pts, labels, instance_classes, Omega):
+
+def rotate_copy_scale(pts, labels, instance_classes, Omega, scale):
     # extract instance points
     pts_inst, labels_inst = [], []
     for s_class in instance_classes:
@@ -46,20 +47,40 @@ def rotate_copy(pts, labels, instance_classes, Omega):
     pts_copy = [pts_inst]
     labels_copy = [labels_inst]
     for omega_j in Omega:
-        rot_mat = np.array([[np.cos(omega_j),
-                             np.sin(omega_j), 0],
-                            [-np.sin(omega_j),
-                             np.cos(omega_j), 0], [0, 0, 1]])
+        rot_mat = np.array([
+            [np.cos(omega_j) * scale, np.sin(omega_j) * scale, 0],
+            [-np.sin(omega_j) * scale, np.cos(omega_j) * scale, 0],
+            [0, 0, 1]
+        ])
         new_pt = np.zeros_like(pts_inst)
         new_pt[:, :3] = np.dot(pts_inst[:, :3], rot_mat)
-        new_pt[:, 3] = pts_inst[:, 3]
+        new_pt[:, 3] = pts_inst[:, 3]  # Assuming the fourth column should not be scaled
         pts_copy.append(new_pt)
         labels_copy.append(labels_inst)
     pts_copy = np.concatenate(pts_copy, axis=0)
     labels_copy = np.concatenate(labels_copy, axis=0)
     return pts_copy, labels_copy
 
-def polarmix(pts1, labels1, pts2, labels2, alpha, beta, instance_classes, Omega):
+
+    # # rotate-copy
+    # pts_copy = [pts_inst]
+    # labels_copy = [labels_inst]
+    # for omega_j in Omega:
+    #     rot_mat = np.array([[np.cos(omega_j),
+    #                          np.sin(omega_j), 0],
+    #                         [-np.sin(omega_j),
+    #                          np.cos(omega_j), 0], [0, 0, 1]])
+    #     new_pt = np.zeros_like(pts_inst)
+    #     new_pt[:, :3] = np.dot(pts_inst[:, :3], rot_mat)
+    #     new_pt[:, 3] = pts_inst[:, 3]
+    #     pts_copy.append(new_pt)
+    #     labels_copy.append(labels_inst)
+    # pts_copy = np.concatenate(pts_copy, axis=0)
+    # labels_copy = np.concatenate(labels_copy, axis=0)
+    # return pts_copy, labels_copy
+
+
+def polarmix(pts1, labels1, pts2, labels2, alpha, beta, instance_classes, Omega, scale):
     pts_out, labels_out = pts1, labels1
     # swapping
     if np.random.random() < 0.5:
@@ -68,7 +89,7 @@ def polarmix(pts1, labels1, pts2, labels2, alpha, beta, instance_classes, Omega)
     # rotate-pasting
     if np.random.random() < 1.0:
         # rotate-copy
-        pts_copy, labels_copy = rotate_copy(pts2, labels2, instance_classes, Omega)
+        pts_copy, labels_copy = rotate_copy_scale(pts2, labels2, instance_classes, Omega, scale)
         # paste
         pts_out = np.concatenate((pts_out, pts_copy), axis=0)
         labels_out = np.concatenate((labels_out, labels_copy), axis=0)

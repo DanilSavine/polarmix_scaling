@@ -131,15 +131,18 @@ class SemanticKITTIInternal:
         self.google_mode = google_mode
         self.seqs = []
         if split == 'train':
-            self.seqs = ['00', '01', '02', '03', '04', '05', '06', '07', '09', '10']
+            self.seqs = ['00', 
+                         '01', '02', '03', '04', '05', '06', '07', '09', '10'
+                         ]
             if self.google_mode or trainval:
-                self.seqs.append('08')
+                self.seqs.append('08') # updated
         elif self.split == 'val':
             self.seqs = ['08']
         elif self.split == 'test':
             self.seqs = [
-                '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
-            ]
+                        '11', 
+                        '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
+                        ]
 
         self.files = []
         for seq in self.seqs:
@@ -207,10 +210,11 @@ class SemanticKITTIInternal:
             # polarmix
             alpha = (np.random.random() - 1) * np.pi
             beta = alpha + np.pi
+            scale = np.random.uniform(0.90, 1.10)
             block_, labels_ = polarmix(block_, labels_, pts2, labels2,
                                       alpha=alpha, beta=beta,
                                       instance_classes=instance_classes,
-                                      Omega=Omega)
+                                      Omega=Omega, scale = scale)
 
         block = np.zeros_like(block_)
 

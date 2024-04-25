@@ -1,0 +1,11 @@
+model:
+  name: spvcnn
+  cr: 0.5
+
+num_epochs: 30
+batch_size: 16
+
+run_dir: runs/semantickitti/semantic_kitti_polarmix_16_scale
+
+dataset:
+  name: semantic_kitti_wo_polarmix

@@ -15,12 +15,17 @@ __all__ = [
 def make_dataset() -> Dataset:
     if configs.dataset.name == 'semantic_kitti':
         from core.datasets import SemanticKITTI_PolarMix as SemanticKITTI
-
+        dataset = SemanticKITTI(root=configs.dataset.root,
+                                num_points=configs.dataset.num_points,
+                                voxel_size=configs.dataset.voxel_size)
+    elif configs.dataset.name == 'semantic_kitti_wo_polarmix':
+        from core.datasets import SemanticKITTI
         dataset = SemanticKITTI(root=configs.dataset.root,
                                 num_points=configs.dataset.num_points,
                                 voxel_size=configs.dataset.voxel_size)
     else:
         raise NotImplementedError(configs.dataset.name)
+    
     return dataset
 
 def make_model() -> nn.Module:

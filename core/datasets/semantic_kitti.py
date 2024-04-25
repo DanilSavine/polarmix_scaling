@@ -119,14 +119,17 @@ class SemanticKITTIInternal:
         if split == 'train':
             self.seqs = ['00']
             # logger.info("Only use seq 00 for training")
-            self.seqs = ['00', '01', '02', '03', '04', '05', '06', '07', '09', '10']
+            self.seqs = ['00', 
+                        #  '01', '02', '03', '04', '05', '06', '07', '09', '10'
+                         ]
             if self.google_mode or trainval:
-                self.seqs.append('08')
+                self.seqs.append('08') # updated 
         elif self.split == 'val':
             self.seqs = ['08']
         elif self.split == 'test':
             self.seqs = [
-                '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
+                '11', 
+                # '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
             ]
 
         self.files = []

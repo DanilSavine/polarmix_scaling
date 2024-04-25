@@ -22,8 +22,8 @@ from core.callbacks import MeanIoU
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('config', metavar='FILE', help='config file')
-    parser.add_argument('--run-dir', metavar='DIR', help='run directory')
     parser.add_argument('--gpu', default='0', help='gpu index')
+    parser.add_argument('--run-dir', metavar='DIR', help='run directory')
     args, opts = parser.parse_known_args()
 
     configs.load(args.config, recursive=True)
@@ -55,10 +55,10 @@ def main() -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
-    if configs.dataset.name == 'semantic_kitti':
-        dataset = builder.make_dataset()
-    else:
-        raise ValueError
+    # if configs.dataset.name == 'semantic_kitti':
+    dataset = builder.make_dataset()
+    # else:
+    #     raise ValueError
 
     dataflow = {}
     for split in dataset:

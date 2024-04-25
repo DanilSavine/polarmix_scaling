@@ -1,0 +1,11 @@
+model:
+  name: spvcnn
+  cr: 0.5
+
+num_epochs: 30
+batch_size: 16
+
+run_dir: runs/semantickitti/spvcnn_polarmix_overnight_16
+
+dataset:
+  name: semantic_kitti

@@ -22,6 +22,7 @@ import pdb
 
 
 def main() -> None:
+    print("start")
     dist.init()
 
     torch.backends.cudnn.benchmark = True
@@ -39,8 +40,10 @@ def main() -> None:
     configs.update(opts)
 
     if args.run_dir is None:
+        print("auto_set_run_dir")
         args.run_dir = auto_set_run_dir()
     else:
+        print("run_dir")
         set_run_dir(args.run_dir)
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
@@ -64,13 +67,13 @@ def main() -> None:
             collate_fn=dataset[split].collate_fn)
 
     assert os.path.exists(args.name + '/checkpoints/max-iou-test.pt')
-    if 'spvcnn' in args.name.lower():
-        model = spvcnn_test(weight_path=args.name+'/checkpoints/max-iou-test.pt', configs=configs)
-    elif 'mink' in args.name.lower():
+    # if 'semantic_kitti_overnight_16' in args.name.lower():
+    model = spvcnn_test(weight_path=args.name+'/checkpoints/max-iou-test.pt', configs=configs)
+    # elif 'mink' in args.name.lower():
         # model = minkunet(args.name)
-        model = minkunet_test(weight_path=args.name + '/checkpoints/max-iou-test.pt', configs=configs)
-    else:
-        raise NotImplementedError
+        # model = minkunet_test(weight_path=args.name + '/checkpoints/max-iou-test.pt', configs=configs)
+    # else:
+    #     raise NotImplementedError
 
     model = torch.nn.parallel.DistributedDataParallel(
         model.cuda(),
